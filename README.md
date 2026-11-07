@@ -1,45 +1,73 @@
-# 我的测试站点
+# IT 运维任务池（演示版）
 
-> ⚠️ **前提**：本说明以「GitHub 登录名 = `lengzhiluo`」为目标。
-> 若你还没把账号用户名改成 `lengzhiluo`，请先到 GitHub **Settings → Account** 把 Username 改成 `lengzhiluo`
-> （需该名未被占用），否则用户页地址不会是 `lengzhiluo.github.io`。
-> 若不改名（登录名仍是 `pengyuyan88`），则用户页地址为 `https://pengyuyan88.github.io/`，
-> 或项目页 `https://pengyuyan88.github.io/仓库名/`。
+面向公司内部的 IT 运维报障与任务认领系统：员工报障 → IT 自主认领 → 处理闭环 → 获得贡献点 → 解锁成就。纯荣誉体系，年度积分除夕重置，累计成就永久保留。
 
-用 GitHub Pages 免费托管的小网站，用于测试自己写的项目。
+> 这是**纯前端演示版**：零构建、零依赖、数据存在浏览器 localStorage。目的是先看页面布局和基本流程，后续再接真实后端。
 
 ## 本地预览
 
-直接用浏览器打开 `index.html` 即可，无需任何构建步骤。
+最简单：直接用浏览器打开 `index.html`。
+
+或用任意静态服务器（推荐，避免部分浏览器对 `file://` 的限制）：
+
+```bash
+# Python 3
+python -m http.server 8000
+# 然后打开 http://localhost:8000
+```
 
 ## 部署到 GitHub Pages
 
-### 方式一：项目页（推荐，仓库名随意）
+本仓库就是用户页仓库 `lengzhiluo.github.io`，推送到 `main` 后自动发布：
 
-1. 在 GitHub 新建一个仓库，例如 `my-test-site`（名字随便取）。
-2. 把本目录所有文件推送到该仓库的 `main` 分支：
+```bash
+git add .
+git commit -m "IT 运维任务池演示版"
+git push origin main
+```
 
-   ```bash
-   git remote add origin https://github.com/lengzhiluo/my-test-site.git
-   git branch -M main
-   git push -u origin main
-   ```
+等 1～2 分钟，访问 **https://lengzhiluo.github.io/** 即可。
 
-3. 进入仓库 **Settings → Pages**，Source 选择 **Deploy from a branch**，
-   Branch 选 `main`、目录选 `/ (root)`，点击 Save。
-4. 等待 1～2 分钟，访问 `https://lengzhiluo.github.io/my-test-site/` 即可。
+> 若 Pages 未自动开启：仓库 Settings → Pages → Source 选 `Deploy from a branch` → Branch 选 `main`、目录 `/ (root)` → Save。
 
-### 方式二：用户页（专属主域名）
+## 演示怎么玩
 
-1. 仓库名**必须**是 `lengzhiluo.github.io`。
-2. 同样推送到 `main` 分支并在 Settings → Pages 开启。
-3. 访问 `https://lengzhiluo.github.io/` 即可（无需仓库名后缀）。
+默认身份是 **王强（IT 运维）**，右上角下拉可随时切换身份（员工 / IT / 主管）。
 
-> 注意：把上面所有 `lengzhiluo` 替换成你真实的 GitHub 用户名。
-> 改完内容后，`git add . && git commit -m "更新" && git push` 就会自动重新发布。
+1. **员工报障**：切成「李明（员工）」→ 报障页填标题、分类、紧急度 → 提交 → 工单进入任务池。
+2. **IT 认领**：切回「王强（IT）」→ 任务池看到新单 → 点「认领」。
+3. **处理闭环**：进「我的任务」→ 开始处理 → 填写根因与结论 → 提交 → 确认闭环，积分自动到账。
+4. **自创单**：报障页顶部切到「IT 自创单」→ 创建即承接 → 填结论直接闭环（巡检、机房维护、批量升级走这条）。
+5. **成就与积分**：进「我的」看年度积分、赛季进度、成就墙和最近积分。
+6. **团队**：看团队共同目标、成员贡献、团队徽章。
+7. **管理**：切到「陈刚（主管）」→ 右上角「管理」可改积分规则、声明本月班次、重置演示数据。
 
-## 文件说明
+## 已实现
 
-- `index.html` —— 页面结构
-- `style.css` —— 样式
-- `script.js` —— 示例交互（点击计数）
+- 响应式布局：移动端底部 Tab，PC 端顶部导航 + 多列卡片
+- 报障 / IT 自创单 / 任务池 / 我的任务 / 工单详情 / 消息中心 / 我的（积分+成就）/ 团队 / 管理后台
+- 工单状态机：待认领 → 已认领 → 处理中 → 待确认 → 已闭环
+- 积分规则：普通 +1、紧急 +2、自创 +1、夜班 ×1.5（可在管理页调整）
+- 成就体系：里程碑 / 专精 / 质量 / 时效 / 知识 / 夜班 / 团队
+- 站内消息中心 + 未读红点
+- 数据本地持久化，可一键重置
+
+## 后续可完善（接真实后端时）
+
+- 把 `js/store.js` 里的读写方法换成 `fetch` 调用（页面层 `js/app.js` 不用改）
+- 共享访问口令 + 3 个 IT 独立账号的鉴权
+- 浏览器 Web Push 系统推送（替代企微通知）
+- SQLite / PostgreSQL 持久化、服务端定时任务（15 分钟兜底、2h/24h 提醒、48h 自动确认、赛季切换）
+- 工单图片上传、知识库、SLA 看板
+
+## 目录结构
+
+```
+├── index.html        页面壳
+├── style.css         全部样式（含响应式）
+├── js/
+│   ├── data.js       种子数据 + 成就定义 + 配置
+│   ├── store.js      业务逻辑 + localStorage 持久化
+│   └── app.js        hash 路由 + 页面渲染 + 事件
+└── README.md
+```
