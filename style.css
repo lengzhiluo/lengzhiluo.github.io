@@ -1,0 +1,59 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  padding: 2.5rem 3rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+p {
+  margin: 0.8rem 0;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.7rem 1.6rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 999px;
+  background: #fff;
+  color: #764ba2;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s;
+}
+
+button:active {
+  transform: scale(0.96);
+}
+
+.hint {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-top: 1.5rem;
+}
